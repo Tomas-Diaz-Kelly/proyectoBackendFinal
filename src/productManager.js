@@ -7,37 +7,47 @@ export class ProductManager {
         this.path = 'products.json'
         this.products = []
     }
-    addProduct = async ({title, description, price, thumbnail, code , stock , status , category }) => {
-        const id = uuidv4()
-        let newProduct = {id, title, description, price, thumbnail, code , stock , status , category }
-        this.products = await this.getProducts()
-        this.products.push(newProduct)
-        await fs.writeFile(this.path, JSON.stringify(this.products))
-        return newProduct;
-    }
-
-    getProducts = async () => {
+    addProduct = async ({ title, description, price, thumbnail, code, stock, status, category }) => {
+      const id = uuidv4();
+      const newProduct = { id, title, description, price, thumbnail, code, stock, status, category };
+      
       try {
+        this.products = await this.getProducts();
+          this.products.push(newProduct);
+          await fs.writeFile(this.path, JSON.stringify(this.products, null));
+          return newProduct;
+      } catch (error) {
+          console.error('Error al agregar el producto:', error);
+          return null;
+      }
+  }
+  
+
+   getProducts = async () => {
+    try {
         const response = await fs.readFile(this.path, 'utf8');
         const products = JSON.parse(response);
         return products;
-      } catch (error) {
+    } catch (error) {
         console.log('Error al obtener los productos:', error);
-        return [];
-      }
+        return null;
     }
+}
+
     
     
     getProductsById = async (id) => {
-        const response = this.getProducts()
-        const product = response.find(p => p.id === id )
-
-        if(product){
-            return product
-        }else{
-            console.log('Producto no encontrado');
-        }
-    }
+      const response = await this.getProducts();
+      const product = response.find(p => p.id === id);
+  
+      if (product) {
+          return product;
+      } else {
+          console.log('Producto no encontrado');
+          return null; 
+      }
+  }
+  
 
     updateProduct = async (id, {...data}) => {
       const products = await this.getProducts();

@@ -1,12 +1,8 @@
 import { Router } from "express";
 import { productManager} from "../server.js";
 
-
-
 const productsRouter = Router()
 
-
-// En tu archivo productsRouter.js o donde estés configurando las rutas
 productsRouter.get('/', async (req, res) => {
     try {
         const { limit } = req.query;
@@ -17,15 +13,13 @@ productsRouter.get('/', async (req, res) => {
             return res.json(limitedProducts);
         }
         
-        // Enviar todos los detalles del producto
+        
         return res.json(products);
     } catch (error) {
         console.log(error);
         res.status(500).send('Error al obtener los productos');
     }
 });
-
-
 
 productsRouter.get('/:pid', async (req,res) => {
     const {pid} = req.params;
@@ -41,21 +35,20 @@ productsRouter.get('/:pid', async (req,res) => {
 productsRouter.post('/', async (req, res) => {
     try {
         const { title, description, price, thumbnail, code, stock, status, category } = req.body;
-
         
-        if (!title || !description || !price || !thumbnail || !code || !stock || !status || !category) {
+        if (!title || !description || !price || !code || !stock || !status || !category) {
             return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+        }else{
+            
+                    const response = await productManager.addProduct({ title, description, price, thumbnail, code, stock, status, category });
+                    res.json(response);
         }
-
-        const response = await productManager.addProduct({ title, description, price, thumbnail, code, stock, status, category });
-        res.json(response);
 
     } catch (error) {
         console.log(error);
         res.status(500).send('Error al agregar el producto');
     }
 });
-
 
 productsRouter.put('/:pid', async (req, res) => {
     const { pid } = req.params;
@@ -69,7 +62,6 @@ productsRouter.put('/:pid', async (req, res) => {
         res.send(`Error cuando quiero actualizar el producto ${pid}`);
     }
 });
-
 
 productsRouter.delete('/:pid', async (req, res) => {
     const {pid} = req.params;

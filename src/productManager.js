@@ -49,17 +49,19 @@ export class ProductManager {
   }
   
 
-    updateProduct = async (id, {...data}) => {
-      const products = await this.getProducts();
-      const index = products.findIndex(p => p.id === id);
-      if (index !== -1) {
-        products[index] = { id, ...data };
-        await fs.writeFile(this.path, JSON.stringify(products));
-        return products[index];
-      } else {
-        console.log('Producto no encontrado');
-      }
+  updateProduct = async (id, data) => {
+    const products = await this.getProducts();
+    const index = products.findIndex(p => p.id === id);
+    if (index !== -1) {
+      products[index] = { ...products[index], ...data };
+      await fs.writeFile(this.path, JSON.stringify(products));
+      return products[index];
+    } else {
+      console.log('Producto no encontrado');
+      return null; 
     }
+  }
+  
     
       
 

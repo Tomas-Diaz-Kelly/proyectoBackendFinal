@@ -21,5 +21,16 @@
     "status": "agotado",
     "category": "Ropa"
   },
-  { "id": "36d37507-752f-401e-8345-f8e338219010" }
+  { "id": "36d37507-752f-401e-8345-f8e338219010" },
+  {
+    "id": "21635051-de62-40b0-bf2b-3850eb2a09d8",
+    "title": "Producto 1",
+    "description": "Descripción producto agregado post",
+    "price": 19.99,
+    "thumbnail": "path/to/thumbnail1.jpg",
+    "code": "P001",
+    "stock": 100,
+    "status": "disponible",
+    "category": "Electrónicos"
+  }
 ]

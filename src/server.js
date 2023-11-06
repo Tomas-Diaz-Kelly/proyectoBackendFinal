@@ -9,8 +9,15 @@ const PORT = 8080;
 const app = express();
 
 app.use(express.json());
-app.use(productsRouter);
-app.use(cartsRouter);
+app.use('/api/products',productsRouter);
+app.use('/api/carts',cartsRouter);
+
+app.use((err, req, res, next) => {
+  res.json({
+    status: 'error',
+    descr:err.message
+  })
+})
 
 app.listen(PORT, () => {
   console.log(`Conectado al puerto: ${PORT}`);

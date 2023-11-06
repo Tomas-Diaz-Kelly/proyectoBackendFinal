@@ -65,17 +65,26 @@ export class ProductManager {
     
       
 
-      deleteProduct = async(id) => {
+  deleteProduct = async (id) => {
+    try {
         const products = await this.getProducts();
         const indice = products.findIndex(p => p.id === id);
-      
+
         if (indice !== -1) {
-          products.splice(indice, 1);
-          await fs.writeFile(this.path, JSON.stringify(products));
+            products.splice(indice, 1);
+            await fs.writeFile(this.path, JSON.stringify(products));
+            console.log('Producto eliminado correctamente');
+            return true;
         } else {
-          console.log('Producto no encontrado');
+            console.log('Producto no encontrado');
+            return false;
         }
-      }
+    } catch (error) {
+        console.error('Error al eliminar el producto:', error);
+        return null; 
+    }
+}
+
       
       
 }

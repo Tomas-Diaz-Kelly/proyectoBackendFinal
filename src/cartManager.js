@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 class CartManager {
     constructor() {
-        this.path = 'cart.json'
+        this.path = 'cart.json'; 
         this.carts = {};
     } 
 
@@ -19,11 +19,23 @@ class CartManager {
         return this.carts[cartId];
     }
 
+    async loadCart(){
+        try {
+            await fs.access(this.path, fs.constants.F_OK);
+            const cart = await fs.readFile(this.path, 'utf-8');
+            this.carts = JSON.parse(cart);
+        } catch (error) {
+            this.carts = {};
+        }
+    }
+
     async getCartById(cartId) {
+        await this.loadCart();
         return this.carts[cartId];
     }
 
     async addProductToCart(cartId, productId, quantity) {
+        await this.loadCart();
         const cart = this.carts[cartId];
     
         if (cart) {
@@ -45,11 +57,11 @@ class CartManager {
             return null;
         }
     }
+
     async writeCartsToFile() {
         try {
-            await fs.writeFile('src/cart.json', JSON.stringify(this.carts, null, 2));
+            await fs.writeFile(this.path, JSON.stringify(this.carts, null, 2));
             console.log('Carts escritos en el archivo correctamente.');
-            
         } catch (error) {
             throw new Error('Error al escribir en el archivo: ' + error.message);
         }

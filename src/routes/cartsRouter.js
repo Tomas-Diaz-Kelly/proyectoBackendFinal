@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { cartManager } from "../cartManager.js"; 
 
 export const cartsRouter = Router();
 
@@ -12,7 +13,6 @@ cartsRouter.post('/', async (req, res) => {
   }
 });
 
-
 cartsRouter.get('/:cid', async (req, res) => {
   const { cid } = req.params;
   try {
@@ -23,7 +23,6 @@ cartsRouter.get('/:cid', async (req, res) => {
     res.status(500).send('Error al obtener el carrito');
   }
 });
-
 
 cartsRouter.post('/:cid/product/:pid', async (req, res) => {
   const { cid, pid } = req.params;
@@ -37,5 +36,3 @@ cartsRouter.post('/:cid/product/:pid', async (req, res) => {
     res.status(500).send('Error al agregar el producto al carrito');
   }
 });
-
-
